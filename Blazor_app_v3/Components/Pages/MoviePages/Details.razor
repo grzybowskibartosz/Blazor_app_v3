@@ -10,7 +10,7 @@
 
 <h1>Details</h1>
 
-<div>
+<div style="margin-left: 150px; margin-right: 150px">
     <h4>Movie</h4>
     <hr />
     @if (movie is null)
@@ -18,33 +18,43 @@
         <p><em>Loading...</em></p>
     }
     else {
-        <dl class="row">
-            <dt class="col-sm-2">Title</dt>
-            <dd class="col-sm-10">@movie.Title</dd>
-            <dt class="col-sm-2">Description</dt>
-            <dd class="col-sm-10">@movie.Description</dd>
-            <dt class="col-sm-2">RelaseDate</dt>
-            <dd class="col-sm-10">@movie.RelaseDate</dd>
-            <dt class="col-sm-2">Rate</dt>
-            <dd class="col-sm-10">@movie.AverageRating</dd>
-            <dt class="col-sm-2">Poster</dt>
-            <dd class="col-sm-10">
-                @if (!string.IsNullOrEmpty(movie.imgUrl))
-                {
-                    <img src="@movie.imgUrl" alt="Movie Image" width="350" height="500" />
-                }
-                else
-                {
-                    <p>No image available</p>
-                }
-            </dd>
-        </dl>
         <div>
+            <dl class="row" style="margin-left: 350px; margin-right: 350px">
+                <dt class="col-sm-2">Title</dt>
+                <dd class="col-sm-10">@movie.Title</dd>
+                <dt class="col-sm-2">Description</dt>
+                <dd class="col-sm-10">@movie.Description</dd>
+                <dt class="col-sm-2">RelaseDate</dt>
+                <dd class="col-sm-10">@movie.RelaseDate</dd>
+                <dt class="col-sm-2">Rate</dt>
+                <dd class="col-sm-10">@movie.AverageRating</dd>
+                <dt class="col-sm-2">Poster</dt>
+                <dd class="col-sm-10">
+                    @if (!string.IsNullOrEmpty(movie.imgUrl))
+                    {
+                        <img src="@movie.imgUrl" alt="Movie Image" width="350" height="500" />
+                    }
+                    else
+                    {
+                        <p>No image available</p>
+                    }
+                </dd>
+            </dl>
+        </div>
+        <h4>Your Rate</h4>
+        <hr />
+        <div style="margin-left: 350px; margin-right: 350px">
             <EditForm Model="userRating" OnValidSubmit="UpdateRating" FormName="rating2" Enhance>
                 <label for="rating">Your Rating (1-10):</label>
                 <InputNumber id="rating" @bind-Value="userRating.RateValue" min="1" max="10" class="form-control" />
-                <button type="submit" class="btn btn-primary" style="margin-top: 10px">Submit Rating</button>
+                <button type="submit" class="btn btn-primary" style="margin-top: 10px; margin-bottom: 10px">Submit Rating</button>
             </EditForm>
+        </div>
+        <h4>Your Cinema</h4>
+        <hr />
+        <div style="text-align: center">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2505.654986322332!2d17.03159707706554!3d51.09637447172294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470fc26f5ea1b6c1%3A0x8140f87c4eabc499!2sCinema%20City%20IMAX%20Wroclavia!5e0!3m2!1spl!2spl!4v1715167793277!5m2!1spl!2spl" 
+                    width="600" height="450" style="margin-top: 10px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>"
         </div>
         <div>
             <a href="@($"/movies/edit?id={movie.Id}")">Edit</a> |
