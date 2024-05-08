@@ -1,0 +1,47 @@
+﻿@page "/movies"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject Blazor_app_v3.Data.ApplicationDbContext DB
+@using Blazor_app_v3.Components.Classes
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<p>
+    <a href="movies/create">Create New</a>
+</p>
+
+<QuickGrid Items="@SortedMovies" SortChanged="SortMovies">
+    <PropertyColumn Property="@(movie => movie.Title)" Sortable="true"> </PropertyColumn>
+    @if (isUserAuthtenticated)
+    {
+        <PropertyColumn Property="movie => movie.Description" Sortable="true" />
+    }
+    <PropertyColumn Property="movie => movie.RelaseDate" Sortable="true" />
+    <PropertyColumn Property="movie => movie.Rate" Sortable="true" />
+
+    <TemplateColumn Context="movie">
+        <a href="@($"movies/edit?id={movie.Id}")">Edit</a> |
+        <a href="@($"movies/details?id={movie.Id}")">Details</a> |
+        <a href="@($"movies/delete?id={movie.Id}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>
+
+
+@code {
+    public IQueryable<Movie> SortedMovies { get; set; } = null!;
+    public IQueryable<Movie> OriginalMovies { get; set; } = null!;
+
+    private bool isUserAuthtenticated;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        isUserAuthtenticated = authState.User.Identity.IsAuthenticated;
+    }
+
+}
