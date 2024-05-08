@@ -4,6 +4,7 @@
 @using Blazor_app_v3.Components.Classes
 @using Microsoft.AspNetCore.Components.Authorization
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@rendermode InteractiveServer
 
 
 
@@ -15,14 +16,14 @@
     <a href="movies/create">Create New</a>
 </p>
 
-<QuickGrid Items="@DB.Movie" SortChanged="SortMovies">
+<QuickGrid Items="@SortedMovies">
     <PropertyColumn Property="@(movie => movie.Title)" Sortable="true"> </PropertyColumn>
     @if (isUserAuthtenticated)
     {
         <PropertyColumn Property="movie => movie.Description" Sortable="true" />
     }
     <PropertyColumn Property="movie => movie.RelaseDate" Format="dd.MM.yyyy" Sortable="true" />
-    <PropertyColumn Property="movie => movie.AverageRating" Sortable="true" />
+    <PropertyColumn Property="movie => movie.AverageRating" Format="0.00" Sortable="true" />
 
     <TemplateColumn Context="movie">
         <a href="@($"movies/edit?id={movie.Id}")">Edit</a> |
@@ -33,8 +34,12 @@
 
 
 @code {
-    public IQueryable<Movie> SortedMovies { get; set; } = null!;
-    public IQueryable<Movie> OriginalMovies { get; set; } = null!;
+    IQueryable<Movie> SortedMovies = Enumerable.Empty<Movie>().AsQueryable();
+
+    [SupplyParameterFromForm]
+    Movie movie { get; set; } = new();
+    DateOnly SelectedDate;
+    static List<Movie> MoviesList = new();
 
     private bool isUserAuthtenticated;
 
@@ -42,6 +47,29 @@
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         isUserAuthtenticated = authState.User.Identity.IsAuthenticated;
+    }
+
+    protected override void OnInitialized()
+    {
+        ConvertListToQueryable();
+
+        //SortedMovies = DB.Movie;
+    }
+
+    private void ConvertListToQueryable()
+    {
+        MoviesList = DB.Movie.ToList();
+        if (MoviesList is null) return;
+        foreach (var movie in MoviesList.OrderBy(_ => _.Id))
+        {
+            SortedMovies = SortedMovies.Concat(new[] { movie }.AsQueryable());
+        }
+    }
+
+    void GetDataAgain()
+    {
+        SortedMovies = Enumerable.Empty<Movie>().AsQueryable();
+        ConvertListToQueryable();
     }
 
 }
