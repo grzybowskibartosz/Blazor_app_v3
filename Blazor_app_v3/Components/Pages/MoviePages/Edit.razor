@@ -44,6 +44,13 @@ else
                     <InputNumber id="rate" @bind-Value="Movie.Rate" class="form-control" />
                     <ValidationMessage For="() => Movie.Rate" class="text-danger" />
                 </div>
+
+                <div class="mb-3">
+                    <label for="imgUrl" class="form-label">URL image:</label>
+                    <InputText id="imgUrl" @bind-Value="Movie.imgUrl" class="form-control" />
+                    <ValidationMessage For="() => Movie.imgUrl" class="text-danger" />
+                </div>
+
                 <button type="submit" class="btn btn-primary">Save</button>
             </EditForm>
         </div>
@@ -79,6 +86,7 @@ else
 
         try
         {
+            Movie.Rate_num = 1;
             await DB.SaveChangesAsync();
         }
         catch (DbUpdateConcurrencyException)

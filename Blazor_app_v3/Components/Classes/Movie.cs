@@ -12,7 +12,7 @@ namespace Blazor_app_v3.Components.Classes
         public float? Rate { get; set; }
         public int? Rate_num { get; set; }
         public float? AverageRating => Rate != null && Rate_num != null ? Rate / Rate_num : null;
-        public string imgUrl { get; set; }
+        public string? imgUrl { get; set; }
         public List<Class> ratings { get; set; } = new List<Class>();
     }
 }

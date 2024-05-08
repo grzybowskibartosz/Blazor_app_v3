@@ -15,14 +15,14 @@
     <a href="movies/create">Create New</a>
 </p>
 
-<QuickGrid Items="@SortedMovies" SortChanged="SortMovies">
+<QuickGrid Items="@DB.Movie" SortChanged="SortMovies">
     <PropertyColumn Property="@(movie => movie.Title)" Sortable="true"> </PropertyColumn>
     @if (isUserAuthtenticated)
     {
         <PropertyColumn Property="movie => movie.Description" Sortable="true" />
     }
-    <PropertyColumn Property="movie => movie.RelaseDate" Sortable="true" />
-    <PropertyColumn Property="movie => movie.Rate" Sortable="true" />
+    <PropertyColumn Property="movie => movie.RelaseDate" Format="dd.MM.yyyy" Sortable="true" />
+    <PropertyColumn Property="movie => movie.AverageRating" Sortable="true" />
 
     <TemplateColumn Context="movie">
         <a href="@($"movies/edit?id={movie.Id}")">Edit</a> |
