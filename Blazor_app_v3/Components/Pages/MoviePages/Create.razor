@@ -64,12 +64,14 @@
         if (!exists)
         {
             DB.Movie.Add(Movie);
+            Movie.Rate_num = 1;
             await DB.SaveChangesAsync();
             NavigationManager.NavigateTo("/movies");
         }
         else
         {
-            NavigationManager.NavigateTo("/auth");
+            var message = $"Movie with title {Movie.Title} already exists.";
+            NavigationManager.NavigateTo($"/movies/create?message={message}");
         }
     }
 }
